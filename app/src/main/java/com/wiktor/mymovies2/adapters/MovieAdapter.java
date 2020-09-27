@@ -27,10 +27,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         movies = new ArrayList<>();
     }
 
+
     public interface OnPosterClickListener {
         void onPosterClick(int position);
     }
 
+    // слушатель для того что бы подгружать список фильмов только тогда когда подошли к концу загруженного списка
     public interface OnReachEndListener {
         void onReachEnd();
     }

@@ -1,7 +1,14 @@
 package com.wiktor.mymovies2.data;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+//Аннотация говорит что этот класс теперь является таблицей в базе данных
+//tableName = "movies" --- название. Как эта таблица будет называться в базе данных
+@Entity(tableName = "movies")
 public class Movie {
 
+    @PrimaryKey
     private int id;
     private int voteCount;
     private String title;

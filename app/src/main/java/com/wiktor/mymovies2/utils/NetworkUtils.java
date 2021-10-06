@@ -128,7 +128,7 @@ public class NetworkUtils {
                     //после присоединения линии к билдеру, присваиваем линии значение:
                     line = reader.readLine();
                 }
-                // После того как мы прочитали все данные, мы переменной result присваиваем значени:
+                // После того как мы прочитали все данные, мы переменной result присваиваем значение:
                 result = new JSONObject(builder.toString());
             } catch (IOException | JSONException e) {
                 e.printStackTrace();

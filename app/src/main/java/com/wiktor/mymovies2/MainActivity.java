@@ -1,15 +1,16 @@
 package com.wiktor.mymovies2;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.wiktor.mymovies2.adapters.MovieAdapter;
 import com.wiktor.mymovies2.data.Movie;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         textViewTopPopularity = findViewById(R.id.textViewPopularity);
 
         recyclerViewPosters = findViewById(R.id.recyclerViewPosters);
-        recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, 3));
         movieAdapter = new MovieAdapter();
         //Устанавливаем адаптер у RecyclerView
         recyclerViewPosters.setAdapter(movieAdapter);
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         });
         switchSort.setChecked(false);
 
+
+        //Нажатие на постер к фильму
         movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override
             public void onPosterClick(int position) {
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Конец списка
         movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
             @Override
             public void onReachEnd() {
@@ -84,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
         if (isTopRated) {
             methodOfSort = NetworkUtils.TOP_RATED;
             textViewTopRated.setTextColor(getResources().getColor(R.color.colorAccent));
-            textViewTopPopularity.setTextColor(getResources().getColor(R.color.colorWhite));
+            textViewTopPopularity.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
         } else {
             methodOfSort = NetworkUtils.POPULARITY;
-            textViewTopRated.setTextColor(getResources().getColor(R.color.colorWhite));
+            textViewTopPopularity.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
             textViewTopPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
         }
         //Получаем список фильмов

@@ -23,7 +23,11 @@ public class NetworkUtils {
     private static final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
 
     //Базовая ссылка для загрузки картинки
+    private  static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/";
 
+    //размеры для постеров
+    public  static final String SMALL_POSTER_SIZE = "w185";
+    public  static final String BIG_POSTER_SIZE = "w780";
 
 
     // Параметры для запроса в сеть
@@ -52,7 +56,6 @@ public class NetworkUtils {
     //Метод формирующий запрос
     //предаем метод сортировки в метод построения URL
     // Передаем в параметрах номер страницы
-
     private static URL buildURL(int sortBy, int page) {
         //Переменная которую нужно вернуть
         URL result = null;
@@ -75,23 +78,6 @@ public class NetworkUtils {
         try {
             result = new URL(uri.toString());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    //Создаем метод который будет получать JSON из сети.
-    public static JSONObject getJSONFrmNetwork(int sortBy, int page){
-        JSONObject result = null;
-        //вызываем метод формирующий запрос
-        URL url = buildURL(sortBy, page); //  Получили URL
-        Log.i("qwertyu", "url в NetworkUtils = "+ url.toString());
-        //Создаем объет класса
-        try {
-            result =  new JSONLoadTask().execute(url).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return result;
@@ -137,8 +123,25 @@ public class NetworkUtils {
                     connection.disconnect();
                 }
             }
-
+            Log.i("qwertyu", "JSONLoadTask   JSONObject result =  "+ result);
             return result;
         }
+    }
+
+    //Создаем метод который будет получать JSON из сети.
+    public static JSONObject getJSONFrmNetwork(int sortBy, int page){
+        JSONObject result = null;
+        //вызываем метод формирующий запрос
+        URL url = buildURL(sortBy, page); //  Получили URL
+        Log.i("qwertyu", "url в NetworkUtils = "+ url.toString());
+        //Создаем объет класса
+        try {
+            result =  new JSONLoadTask().execute(url).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

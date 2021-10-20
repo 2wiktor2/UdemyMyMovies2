@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.squareup.picasso.Picasso;
 import com.wiktor.mymovies2.R;
 import com.wiktor.mymovies2.data.Movie;
@@ -55,10 +54,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        if (position == movies.size() - 4 && onReachEndListener != null) {
+        if (position > movies.size() - 4 && onReachEndListener != null) {
             onReachEndListener.onReachEnd();
         }
         Movie movie = movies.get(position);
+/*        ImageView imageView = holder.imageViewSmallPoster;
+        Picasso.get().load(movie.getPosterPath()).into(imageView);*/
         Picasso.get().load(movie.getPosterPath()).into(holder.imageViewSmallPoster);
     }
 

@@ -50,7 +50,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'*/
 
     // Для ROOM
-    def room_version = "2.2.5"
+    def room_version = "2.3.0"
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
@@ -69,7 +69,7 @@ dependencies {
 
 
     // Для Lifecycle
-    def lifecycle_version = "2.2.0"
+    def lifecycle_version = "2.3.1"
     def arch_version = "2.1.0"
 
     // ViewModel

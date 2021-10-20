@@ -22,15 +22,18 @@ public interface MovieDao {
     @Query("SELECT * FROM movies WHERE id == :movieId")
     Movie getMovieById(int movieId);
 
+
     // Метод который удаляет все фильмы из бд
     @Query("DELETE FROM movies")
     void deleteAllMovies();
+
 
     //Метод для всавки данных
     @Insert
     void insertMovie(Movie movie);
 
-    //Метод для удаления одного элемента
+
+    //Метод для удаления одного элемента из базы
     @Delete
     void deleteMovie(Movie movie);
 }

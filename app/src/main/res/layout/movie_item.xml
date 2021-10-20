@@ -6,3 +6,4 @@
     android:adjustViewBounds="true"
     android:contentDescription="@string/poster_of_movie"
     android:orientation="vertical" />
+

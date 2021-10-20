@@ -1,5 +1,6 @@
 package com.wiktor.mymovies2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.IntentCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -67,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
         movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override
             public void onPosterClick(int position) {
-                Toast.makeText(MainActivity.this, "Clicked : " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Clicked : " + position, Toast.LENGTH_SHORT).show();
+                Movie movie = movieAdapter.getMovies().get(position);
+                Intent intent = new Intent(MainActivity.this, ActivityDetail.class);
+                intent.putExtra("id", movie.getId());
+                startActivity(intent);
             }
         });
 
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             textViewTopPopularity.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
         } else {
             methodOfSort = NetworkUtils.POPULARITY;
-            textViewTopPopularity.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
+            textViewTopRated.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
             textViewTopPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
         }
 

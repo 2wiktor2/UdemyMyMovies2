@@ -129,26 +129,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-
-//JSONObject jsonObject = NetworkUtils.getJSONFrmNetwork(me)
-
-
-//String url = NetworkUtils.buildURL(NetworkUtils.POPULARITY, 1).toString();
-//Log.i("qwertyu", url);
-
-/*        JSONObject jsonObject = NetworkUtils.getJSONFrmNetwork(NetworkUtils.TOP_RATED, 3);
-        if (jsonObject == null){
-            Toast.makeText(this, "Произошла ошибка", Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(this, "Успешно", Toast.LENGTH_SHORT).show();
-
-        Log.i("qwertyu", jsonObject.toString());*/
-
-
-/*        ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);
-        // выводим в лог список всех фильмов
-        StringBuilder builder = new StringBuilder();
-        for (Movie movie : movies){
-            builder.append(movie.getTitle()).append("\n");
-        }
-        Log.i("qwertyu", builder.toString());*/

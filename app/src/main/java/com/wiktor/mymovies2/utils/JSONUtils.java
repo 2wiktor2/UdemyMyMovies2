@@ -1,6 +1,8 @@
 package com.wiktor.mymovies2.utils;
 
 import com.wiktor.mymovies2.data.Movie;
+import com.wiktor.mymovies2.data.Review;
+import com.wiktor.mymovies2.data.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +17,7 @@ public class JSONUtils {
 
     //Ключ для JSONArray
     private static final String KEY_RESULTS = "results";
+
     // Для отзывов
     private static final String KEY_AUTHOR = "author";
     private static final String KEY_CONTENT = "content";
@@ -76,6 +79,47 @@ public class JSONUtils {
             e.printStackTrace();
         }
 
+        return result;
+    }
+
+    public static ArrayList<Review> getReviewsFromJSON(JSONObject jsonObject) {
+        ArrayList<Review> result = new ArrayList<>();
+        if (jsonObject == null) {
+            return result;
+        }
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray(KEY_RESULTS);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObjectReview = jsonArray.getJSONObject(i);
+                String author = jsonObjectReview.getString(KEY_AUTHOR);
+                String content = jsonObjectReview.getString(KEY_CONTENT);
+                Review review = new Review(author, content);
+                result.add(review);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static ArrayList<Trailer> getTrailersFromJSON(JSONObject jsonObject) {
+        ArrayList<Trailer> result = new ArrayList<>();
+        if (jsonObject == null) {
+            return result;
+        }
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray(KEY_RESULTS);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObjectTrailers = jsonArray.getJSONObject(i);
+                String key = BASE_YOUTUBE_URL + jsonObjectTrailers.getString(KEY_KEY_OF_VIDEO);
+                String name = jsonObjectTrailers.getString(KEY_NAME);
+                Trailer trailer = new Trailer(key, name);
+                result.add(trailer);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 }

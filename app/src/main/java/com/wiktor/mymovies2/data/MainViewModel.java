@@ -29,6 +29,7 @@ public class MainViewModel extends AndroidViewModel {
 
     // методы для доступа к данным
 
+
     //Метод возвращает объект Movie
     public Movie getMovieById(int id) {
         //Все действия в этом методе нужно выполнить в другом программном потоке, для этого создаем класс GetMovieTask

@@ -19,6 +19,9 @@ import java.util.concurrent.ExecutionException;
 // Здесь осуществляется вся работа связанная с сетью
 public class NetworkUtils {
 
+    // Параметры для запроса в сеть
+
+
     //Базовая ссылка
     private static final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
 
@@ -30,7 +33,6 @@ public class NetworkUtils {
     public  static final String BIG_POSTER_SIZE = "w780";
 
 
-    // Параметры для запроса в сеть
     private static final String BASE_URL_VIDEOS = "https://api.themoviedb.org/3/movie/%s/videos";
     private static final String BASE_URL_REVIEWS = "https://api.themoviedb.org/3/movie/%s/reviews";
 

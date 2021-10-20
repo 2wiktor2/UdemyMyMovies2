@@ -9,10 +9,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wiktor.mymovies2.adapters.MovieAdapter;
+import com.wiktor.mymovies2.data.MainViewModel;
 import com.wiktor.mymovies2.data.Movie;
 import com.wiktor.mymovies2.utils.JSONUtils;
 import com.wiktor.mymovies2.utils.NetworkUtils;
@@ -20,6 +24,7 @@ import com.wiktor.mymovies2.utils.NetworkUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,17 +34,21 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewTopRated;
     private TextView textViewTopPopularity;
 
+    private MainViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         switchSort = findViewById(R.id.switchSort);
         textViewTopRated = findViewById(R.id.textViewTopRated);
         textViewTopPopularity = findViewById(R.id.textViewPopularity);
 
         recyclerViewPosters = findViewById(R.id.recyclerViewPosters);
-        recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, 2));
         movieAdapter = new MovieAdapter();
         //Устанавливаем адаптер у RecyclerView
         recyclerViewPosters.setAdapter(movieAdapter);
@@ -71,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        LiveData<List<Movie>> moviesFromLiveData = viewModel.getMovies();
+        moviesFromLiveData.observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                movieAdapter.setMovies(movies);
+            }
+        });
+
     }
 
     public void onClickSetPopularity(View view) {
@@ -94,11 +111,22 @@ public class MainActivity extends AppCompatActivity {
             textViewTopPopularity.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
             textViewTopPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
         }
+
+        downloadData(methodOfSort, 1);
+    }
+
+    private void downloadData(int methodOfSort, int page) {
         //Получаем список фильмов
-        JSONObject jsonObject = NetworkUtils.getJSONFrmNetwork(methodOfSort, 1);
+        JSONObject jsonObject = NetworkUtils.getJSONFrmNetwork(methodOfSort, page);
         //получаем список фильмов
         ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);
-        movieAdapter.setMovies(movies);
+
+        if (movies != null && !movies.isEmpty()) {
+            viewModel.daleteAllMovies();
+            for (Movie movie : movies) {
+                viewModel.insertMovie(movie);
+            }
+        }
     }
 }
 

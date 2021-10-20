@@ -16,6 +16,11 @@ public class MainViewModel extends AndroidViewModel {
 
     //Создаем объект базы данных
     private static MovieDataBase dataBase;
+
+    public LiveData<List<Movie>> getMovies() {
+        return movies;
+    }
+
     //Список фильмов
     private LiveData<List<Movie>> movies;
 
@@ -43,6 +48,18 @@ public class MainViewModel extends AndroidViewModel {
         return null;
     }
 
+    public void daleteAllMovies() {
+        new DeleteMoviesTask().execute();
+    }
+
+    public void insertMovie(Movie movie) {
+        new InsertTask().execute(movie);
+    }
+
+    public void deleteMovie(Movie movie) {
+        new DeleteTask().equals(movie);
+    }
+
     private static class GetMovieTask extends AsyncTask<Integer, Void, Movie> {
 
         @Override
@@ -52,6 +69,37 @@ public class MainViewModel extends AndroidViewModel {
             }
             return null;
         }
+
     }
 
+    private static class DeleteMoviesTask extends AsyncTask<Void, Void, Movie> {
+
+        @Override
+        protected Movie doInBackground(Void... voids) {
+            dataBase.movieDao().deleteAllMovies();
+            return null;
+        }
+    }
+
+    private static class InsertTask extends AsyncTask<Movie, Void, Movie> {
+
+        @Override
+        protected Movie doInBackground(Movie... movies) {
+            if (movies != null && movies.length > 0) {
+                dataBase.movieDao().insertMovie(movies[0]);
+            }
+            return null;
+        }
+    }
+
+    private static class DeleteTask extends AsyncTask<Movie, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Movie... movies) {
+            if (movies != null && movies.length > 0) {
+                dataBase.movieDao().deleteMovie(movies[0]);
+            }
+            return null;
+        }
+    }
 }

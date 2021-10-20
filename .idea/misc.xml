@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/001_Apps_Udemy/UdemyMyMovies2/app/src/main/res/layout/activity_detail.xml" value="0.640625" />
+        <entry key="..\:/001_Apps_Udemy/UdemyMyMovies2/app/src/main/res/layout/activity_favourite.xml" value="0.5921875" />
         <entry key="..\:/001_Apps_Udemy/UdemyMyMovies2/app/src/main/res/layout/activity_main.xml" value="0.640625" />
         <entry key="..\:/001_Apps_Udemy/UdemyMyMovies2/app/src/main/res/layout/movie_item.xml" value="0.5864583333333333" />
+        <entry key="..\:/001_Apps_Udemy/UdemyMyMovies2/app/src/main/res/menu/main_menu.xml" value="0.5921875" />
       </map>
     </option>
   </component>

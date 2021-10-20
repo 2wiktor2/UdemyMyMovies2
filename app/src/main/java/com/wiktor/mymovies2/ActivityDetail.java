@@ -2,11 +2,15 @@ package com.wiktor.mymovies2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,6 +33,30 @@ public class ActivityDetail extends AppCompatActivity {
     private MainViewModel viewModel;
     private Movie movie;
     private FavouriteMovie favouriteMovie;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.itemMain:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.itemFavourite:
+                Intent intentToFavourite = new Intent(this, ActivityFavourite.class);
+                startActivity(intentToFavourite);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
     @Override
@@ -66,7 +94,7 @@ public class ActivityDetail extends AppCompatActivity {
     public void onClickChangeFavorite(View view) {
         if (favouriteMovie == null) {
             viewModel.insertFavouriteMovie(new FavouriteMovie(movie));
-            Toast.makeText(this, R.string.add_to_favourire, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.add_to_favourite, Toast.LENGTH_SHORT).show();
         } else {
             viewModel.deleteFavouriteMovie(favouriteMovie);
             Toast.makeText(this, R.string.remove_from_favourite, Toast.LENGTH_SHORT).show();

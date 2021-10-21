@@ -8,9 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wiktor.mymovies2.R;
+import com.wiktor.mymovies2.data.Trailer;
+
 import java.util.ArrayList;
 
-/*public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
+public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
 
     private ArrayList<Trailer> trailers;
 
@@ -65,4 +68,4 @@ import java.util.ArrayList;
     public void setOnTrailerClickListener(OnTrailerClickListener onTrailerClickListener) {
         this.onTrailerClickListener = onTrailerClickListener;
     }
-}*/
+}

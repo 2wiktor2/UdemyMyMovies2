@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ public class ActivityDetail extends AppCompatActivity {
     private TextView textViewReleaseDate;
     private TextView textViewOverview;
 
+    private ScrollView scrollViewInfo;
+
     private int id;
     private MainViewModel viewModel;
     private Movie movie;
@@ -52,6 +55,7 @@ public class ActivityDetail extends AppCompatActivity {
 
     private ReviewAdapter reviewAdapter;
     private TrailerAdapter trailerAdapter;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,6 +86,8 @@ public class ActivityDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        scrollViewInfo = findViewById(R.id.scrollViewInfo);
+
         imageViewAddToFavourite = findViewById(R.id.imageViewAddToFavorite);
         imageViewBigPoster = findViewById(R.id.imageViewBigPoster);
         textViewTitle = findViewById(R.id.textViewTitle);
@@ -107,42 +113,44 @@ public class ActivityDetail extends AppCompatActivity {
             textViewReleaseDate.setText(movie.getReleaseDate());
             textViewOverview.setText(movie.getOverview());
 
-        setFavourite();
+            setFavourite();
 
 
-        recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
-        recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
+            recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
+            recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
 
-        trailerAdapter = new TrailerAdapter();
-        reviewAdapter = new ReviewAdapter();
+            trailerAdapter = new TrailerAdapter();
+            reviewAdapter = new ReviewAdapter();
 
-        //Установка слушателя для нажатия по названию трейлера
-        trailerAdapter.setOnTrailerClickListener(new TrailerAdapter.OnTrailerClickListener() {
-            @Override
-            public void onTrailerClick(String url) {
-                //Toast.makeText(ActivityDetail.this, "url = " + url, Toast.LENGTH_SHORT).show();
-                Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intentToTrailer);
-            }
-        });
+            //Установка слушателя для нажатия по названию трейлера
+            trailerAdapter.setOnTrailerClickListener(new TrailerAdapter.OnTrailerClickListener() {
+                @Override
+                public void onTrailerClick(String url) {
+                    //Toast.makeText(ActivityDetail.this, "url = " + url, Toast.LENGTH_SHORT).show();
+                    Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intentToTrailer);
+                }
+            });
 
-        recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerViewTrailers.setAdapter(trailerAdapter);
-        recyclerViewReviews.setAdapter(reviewAdapter);
+            recyclerViewTrailers.setAdapter(trailerAdapter);
+            recyclerViewReviews.setAdapter(reviewAdapter);
 
-        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId());
-        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId());
+            JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId());
+            JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId());
 
-        ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
-        ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
+            ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
+            ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
 
-        trailerAdapter.setTrailers(trailers);
-        reviewAdapter.setReviews(reviews);
+            trailerAdapter.setTrailers(trailers);
+            reviewAdapter.setReviews(reviews);
+
+            scrollViewInfo.smoothScrollTo(0, 0);
+        }
+
     }
-
-}
 
     public void onClickChangeFavorite(View view) {
         if (favouriteMovie == null) {

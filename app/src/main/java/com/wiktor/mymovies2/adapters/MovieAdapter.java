@@ -22,6 +22,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private OnPosterClickListener onPosterClickListener;
     private OnReachEndListener onReachEndListener;
 
+
     public MovieAdapter() {
         movies = new ArrayList<>();
     }
@@ -54,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        if (position > movies.size() - 4 && onReachEndListener != null) {
+        if (movies.size() >= 20 && position > movies.size() - 4 && onReachEndListener != null) {
             onReachEndListener.onReachEnd();
         }
         Movie movie = movies.get(position);
@@ -84,6 +85,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 }
             });
         }
+    }
+
+    public void clear(){
+        this.movies.clear();
+        notifyDataSetChanged();
     }
 
     //метод добавляет фильмы при пролистывании вниз

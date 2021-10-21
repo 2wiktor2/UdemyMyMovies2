@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "movies")
 public class Movie {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int uniqueId;
     private int id;
     private int voteCount;
     private String title;
@@ -22,7 +23,8 @@ public class Movie {
 
 
     //конструктор
-    public Movie(int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String bigPosterPath, String backdropPath, double voteAverage, String releaseDate) {
+    public Movie(int uniqueId, int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String bigPosterPath, String backdropPath, double voteAverage, String releaseDate) {
+        this.uniqueId = uniqueId;
         this.id = id;
         this.voteCount = voteCount;
         this.title = title;

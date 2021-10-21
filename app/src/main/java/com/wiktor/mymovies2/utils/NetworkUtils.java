@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -128,6 +129,17 @@ public class NetworkUtils {
 
         private Bundle bundle;
 
+        private OnStartLoadingListener onStartLoadingListener;
+
+
+        public interface OnStartLoadingListener{
+            void onStartLoading();
+        }
+
+        public void setOnStartLoadingListener(OnStartLoadingListener onStartLoadingListener) {
+            this.onStartLoadingListener = onStartLoadingListener;
+        }
+
         public JSONLoader(@NonNull Context context, Bundle bundle) {
             super(context);
             this.bundle = bundle;
@@ -137,6 +149,10 @@ public class NetworkUtils {
         @Override
         protected void onStartLoading() {
             super.onStartLoading();
+
+            if(onStartLoadingListener != null){
+                onStartLoadingListener.onStartLoading();
+            }
             forceLoad();
         }
 

@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
         switchSort.setChecked(false);
 
-
         //Нажатие на постер к фильму
         movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override

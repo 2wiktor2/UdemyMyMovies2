@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
             @Override
             public void onReachEnd() {
-                Toast.makeText(MainActivity.this, "конец списка", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, "конец списка", Toast.LENGTH_SHORT).show();
 
             }
         });

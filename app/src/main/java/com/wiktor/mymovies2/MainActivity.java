@@ -12,11 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,10 +31,11 @@ import com.wiktor.mymovies2.utils.NetworkUtils;
 
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
     private Switch switchSort;
     private RecyclerView recyclerViewPosters;
@@ -40,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewTopPopularity;
 
     private MainViewModel viewModel;
+
+    //любое число
+    final private static int LOADER_ID = 155;
+    private LoaderManager loaderManager;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        loaderManager = LoaderManager.getInstance(this);
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
@@ -148,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadData(int methodOfSort, int page) {
-        //Получаем список фильмов
+/*        //Получаем список фильмов
         JSONObject jsonObject = NetworkUtils.getJSONFromNetwork(methodOfSort, page);
         //получаем список фильмов
         ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);
@@ -158,6 +168,40 @@ public class MainActivity extends AppCompatActivity {
             for (Movie movie : movies) {
                 viewModel.insertMovie(movie);
             }
+        }*/
+
+        URL url = NetworkUtils.buildURL(methodOfSort, page);
+        Bundle bundle = new Bundle();
+        bundle.putString("url", url.toString());
+
+        //Запускаем загрузчик
+        loaderManager.restartLoader(LOADER_ID, bundle, this);
+
+    }
+
+    @NonNull
+    @Override
+    public Loader onCreateLoader(int id, @Nullable Bundle args) {
+        NetworkUtils.JSONLoader jsonLoader = new NetworkUtils.JSONLoader(this, args);
+        return jsonLoader;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader loader, Object data) {
+        //получаем список фильмов
+        ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON((JSONObject) data);
+
+        if (movies != null && !movies.isEmpty()) {
+            viewModel.daleteAllMovies();
+            for (Movie movie : movies) {
+                viewModel.insertMovie(movie);
+            }
         }
+        loaderManager.destroyLoader(LOADER_ID);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+
     }
 }

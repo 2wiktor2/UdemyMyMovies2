@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void downloadData(int methodOfSort, int page) {
         //Получаем список фильмов
-        JSONObject jsonObject = NetworkUtils.getJSONFrmNetwork(methodOfSort, page);
+        JSONObject jsonObject = NetworkUtils.getJSONFromNetwork(methodOfSort, page);
         //получаем список фильмов
         ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);
 

@@ -8,9 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wiktor.mymovies2.R;
+import com.wiktor.mymovies2.data.Review;
+
 import java.util.ArrayList;
 
-/*public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
     private ArrayList<Review> reviews;
 
@@ -49,4 +52,4 @@ import java.util.ArrayList;
             textViewContent = itemView.findViewById(R.id.textViewContent);
         }
     }
-}*/
+}

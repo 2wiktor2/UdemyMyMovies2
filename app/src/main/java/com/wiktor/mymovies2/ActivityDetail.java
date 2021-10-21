@@ -1,6 +1,7 @@
 package com.wiktor.mymovies2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,11 +14,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.wiktor.mymovies2.adapters.ReviewAdapter;
+import com.wiktor.mymovies2.adapters.TrailerAdapter;
 import com.wiktor.mymovies2.data.FavouriteMovie;
 import com.wiktor.mymovies2.data.MainViewModel;
 import com.wiktor.mymovies2.data.Movie;
+import com.wiktor.mymovies2.data.Review;
+import com.wiktor.mymovies2.data.Trailer;
+import com.wiktor.mymovies2.utils.JSONUtils;
+import com.wiktor.mymovies2.utils.NetworkUtils;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ActivityDetail extends AppCompatActivity {
 
@@ -33,6 +46,12 @@ public class ActivityDetail extends AppCompatActivity {
     private MainViewModel viewModel;
     private Movie movie;
     private FavouriteMovie favouriteMovie;
+
+    private RecyclerView recyclerViewTrailers;
+    private RecyclerView recyclerViewReviews;
+
+    private ReviewAdapter reviewAdapter;
+    private TrailerAdapter trailerAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,7 +75,6 @@ public class ActivityDetail extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -89,6 +107,40 @@ public class ActivityDetail extends AppCompatActivity {
         textViewOverview.setText(movie.getOverview());
 
         setFavourite();
+
+
+        recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
+        recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
+
+        trailerAdapter = new TrailerAdapter();
+        reviewAdapter = new ReviewAdapter();
+
+        //Установка слушателя для нажатия по названию трейлера
+        trailerAdapter.setOnTrailerClickListener(new TrailerAdapter.OnTrailerClickListener() {
+            @Override
+            public void onTrailerClick(String url) {
+                //Toast.makeText(ActivityDetail.this, "url = " + url, Toast.LENGTH_SHORT).show();
+                Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intentToTrailer);
+            }
+        });
+
+        recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerViewTrailers.setAdapter(trailerAdapter);
+        recyclerViewReviews.setAdapter(reviewAdapter);
+
+        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId());
+        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId());
+
+        ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
+        ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
+
+        trailerAdapter.setTrailers(trailers);
+        reviewAdapter.setReviews(reviews);
+
+
     }
 
     public void onClickChangeFavorite(View view) {

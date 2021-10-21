@@ -14,7 +14,7 @@ import kotlin.jvm.internal.PropertyReference0Impl;
 // entities = {Movie.class},   --- таблицы в бд
 // version = 1, --- версия бд
 // exportSchema = false
-@Database(entities = {Movie.class, FavouriteMovie.class}, version = 2, exportSchema = false)
+@Database(entities = {Movie.class, FavouriteMovie.class}, version = 3, exportSchema = false)
 public abstract class MovieDataBase extends RoomDatabase {
 
     private static final String DB_NAME = "movies.db";

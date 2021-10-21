@@ -41,7 +41,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         notifyDataSetChanged();
     }
 
-
     class ReviewViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewAuthor;

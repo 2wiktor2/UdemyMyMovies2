@@ -106,7 +106,7 @@ public class ActivityDetail extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         movie = viewModel.getMovieById(id);
         if (movie != null) {
-            Picasso.get().load(movie.getBigPosterPath()).into(imageViewBigPoster);
+            Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.abc_vector_test).into(imageViewBigPoster);
             textViewTitle.setText(movie.getTitle());
             textViewOriginalTitle.setText(movie.getOriginalTitle());
             textViewRating.setText(Double.toString(movie.getVoteAverage()));
@@ -152,6 +152,15 @@ public class ActivityDetail extends AppCompatActivity {
 
     }
 
+    private void setFavourite() {
+        favouriteMovie = viewModel.getFavouriteMovieById(id);
+        if (favouriteMovie == null) {
+            imageViewAddToFavourite.setImageResource(R.drawable.ic_gray_star_black_24dp);
+        } else {
+            imageViewAddToFavourite.setImageResource(R.drawable.ic_yellow_star_black_24dp);
+        }
+    }
+
     public void onClickChangeFavorite(View view) {
         if (favouriteMovie == null) {
             viewModel.insertFavouriteMovie(new FavouriteMovie(movie));
@@ -161,14 +170,5 @@ public class ActivityDetail extends AppCompatActivity {
             Toast.makeText(this, R.string.remove_from_favourite, Toast.LENGTH_SHORT).show();
         }
         setFavourite();
-    }
-
-    private void setFavourite() {
-        favouriteMovie = viewModel.getFavouriteMovieById(id);
-        if (favouriteMovie == null) {
-            imageViewAddToFavourite.setImageResource(R.drawable.ic_gray_star_black_24dp);
-        } else {
-            imageViewAddToFavourite.setImageResource(R.drawable.ic_yellow_star_black_24dp);
-        }
     }
 }

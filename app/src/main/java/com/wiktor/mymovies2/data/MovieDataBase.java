@@ -7,8 +7,6 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import kotlin.jvm.internal.PropertyReference0Impl;
-
 //Сама база данных
 //Помечаем класс аннотацией @Database() c параметрами:
 // entities = {Movie.class},   --- таблицы в бд

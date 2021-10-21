@@ -99,12 +99,13 @@ public class ActivityDetail extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         movie = viewModel.getMovieById(id);
-        Picasso.get().load(movie.getBigPosterPath()).into(imageViewBigPoster);
-        textViewTitle.setText(movie.getTitle());
-        textViewOriginalTitle.setText(movie.getOriginalTitle());
-        textViewRating.setText(Double.toString(movie.getVoteAverage()));
-        textViewReleaseDate.setText(movie.getReleaseDate());
-        textViewOverview.setText(movie.getOverview());
+        if (movie != null) {
+            Picasso.get().load(movie.getBigPosterPath()).into(imageViewBigPoster);
+            textViewTitle.setText(movie.getTitle());
+            textViewOriginalTitle.setText(movie.getOriginalTitle());
+            textViewRating.setText(Double.toString(movie.getVoteAverage()));
+            textViewReleaseDate.setText(movie.getReleaseDate());
+            textViewOverview.setText(movie.getOverview());
 
         setFavourite();
 
@@ -139,9 +140,9 @@ public class ActivityDetail extends AppCompatActivity {
 
         trailerAdapter.setTrailers(trailers);
         reviewAdapter.setReviews(reviews);
-
-
     }
+
+}
 
     public void onClickChangeFavorite(View view) {
         if (favouriteMovie == null) {

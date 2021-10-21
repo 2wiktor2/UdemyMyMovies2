@@ -1,8 +1,14 @@
 package com.wiktor.mymovies2.utils;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.content.AsyncTaskLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +63,7 @@ public class NetworkUtils {
 
 
     //Построение ссылки для загрузки трейлера
-    private static URL buildUrlToVideos(int id) {
+    public static URL buildUrlToVideos(int id) {
         Uri uri = Uri.parse(String.format(BASE_URL_VIDEOS, id)).buildUpon()
                 .appendQueryParameter(PARAMS_API_KEY, API_KEY)
                 .appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
@@ -71,7 +77,7 @@ public class NetworkUtils {
     }
 
     //Метод возвращает URL к отзывам
-    private static URL buildUrlToReviews(int id) {
+    public static URL buildUrlToReviews(int id) {
         Uri uri = Uri.parse(String.format(BASE_URL_REVIEWS, id)).buildUpon()
                 .appendQueryParameter(PARAMS_API_KEY, API_KEY)
                 //.appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
@@ -87,7 +93,7 @@ public class NetworkUtils {
     //Метод формирующий запрос
     //предаем метод сортировки в метод построения URL
     // Передаем в параметрах номер страницы
-    private static URL buildURL(int sortBy, int page) {
+    public static URL buildURL(int sortBy, int page) {
         //Переменная которую нужно вернуть
         URL result = null;
         String methodOfSort;
@@ -102,6 +108,7 @@ public class NetworkUtils {
                 .appendQueryParameter(PARAMS_API_KEY, API_KEY)
                 .appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
                 .appendQueryParameter(PARAMS_SORT_BY, methodOfSort)
+                .appendQueryParameter(PARAMS_MIN_VOTE_COUNT, MIN_VOTE_COUNT_VALUE)
                 .appendQueryParameter(PARAMS_PAGE, Integer.toString(page))
                 .build();
 
@@ -112,6 +119,77 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    //Загрузка данных.
+    // Отличие от класса JSONLoadTask в том, что мы передаем url не напрямую, а через обект Bundle.
+    // При обрыве связи с интернетом или повороте экрана загрузка начнется заново
+    public static class JSONLoader extends AsyncTaskLoader<JSONObject> {
+
+        private Bundle bundle;
+
+        public JSONLoader(@NonNull Context context, Bundle bundle) {
+            super(context);
+            this.bundle = bundle;
+        }
+
+        // необходимо переопределить метод onStartLoading() и вызвать метод forceLoad() для продолжения загрузки
+        @Override
+        protected void onStartLoading() {
+            super.onStartLoading();
+            forceLoad();
+        }
+
+        @Nullable
+        @Override
+        public JSONObject loadInBackground() {
+            if (bundle == null) {
+                return null;
+            }
+            String urlAsString = bundle.getString("url");
+            URL url = null;
+            try {
+                url = new URL(urlAsString);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            JSONObject result = null;
+            //если urls == null то возвращаем null
+            if (url == null) {
+                return null;
+            }
+            // если все нормально то возвращаем:
+            HttpURLConnection connection = null;
+            //открываем соединение
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                //Когда соединение открыто, Создаем поток ввода.
+                InputStream inputStream = connection.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                //Чтобы читать сразу строками создаем:
+                BufferedReader reader = new BufferedReader(inputStreamReader);
+                //Чтобы сохранять строки создаем
+                StringBuilder builder = new StringBuilder();
+                // Начинаем читать данные
+                String line = reader.readLine();
+                //Пока line != null нужно сохранять полученную строку
+                while (line != null) {
+                    builder.append(line);
+                    //после присоединения линии к билдеру, присваиваем линии значение:
+                    line = reader.readLine();
+                }
+                // После того как мы прочитали все данные, мы переменной result присваиваем значение:
+                result = new JSONObject(builder.toString());
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            Log.i("qwertyu", "JSONLoadTask   JSONObject result =  " + result);
+            return result;
+        }
     }
 
     //Создаем метод который будет загружать данные из интернета. Для этого нам понадобится класс AsyncTask
